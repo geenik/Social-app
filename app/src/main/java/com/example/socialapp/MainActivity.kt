@@ -12,9 +12,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.Query
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),post_adapter.iadapter {
     private lateinit var adapter:post_adapter
     lateinit var recyclerView: RecyclerView
+    lateinit var postdao: postdao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,11 +28,11 @@ class MainActivity : AppCompatActivity() {
         setuprecycler()
     }
     fun setuprecycler(){
-        val postdao=postdao()
+        postdao=postdao()
         val postcollection=postdao.postcolllections
         val query=postcollection.orderBy("createdAt",Query.Direction.DESCENDING)
         val recyclerViewoption=FirestoreRecyclerOptions.Builder<post>().setQuery(query,post::class.java).build()
-        adapter= post_adapter(recyclerViewoption)
+        adapter= post_adapter(recyclerViewoption,this)
         recyclerView.adapter=adapter
         recyclerView.layoutManager=LinearLayoutManager(this)
     }
@@ -44,5 +45,9 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         adapter.stopListening()
         super.onStop()
+    }
+
+    override fun onlikeclicked(postid: String) {
+        postdao.updatelikes(postid)
     }
 }
