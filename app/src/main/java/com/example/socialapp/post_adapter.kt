@@ -51,5 +51,6 @@ class post_adapter(options: FirestoreRecyclerOptions<post>,val listener:iadapter
     }
     interface iadapter{
         fun onlikeclicked(postid:String)
+
     }
 }
